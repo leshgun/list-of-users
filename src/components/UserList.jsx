@@ -6,21 +6,25 @@ import MyForm from '../UI/form/MyForm';
 import MyModal from '../UI/modal/MyModal';
 import User from './User';
 
-const default_form_values = {
+
+
+const default_form_values = [{
 	username: 	'',
 	email: 		'',
 	age:		'',
 	country:	''
-}
+}]
 
-function UserList() {
+
+function UserList () {
+
+	const { usersList, setUsersList } = useContext(MyContext); 
 
 	const [ visible, setVisible ] = useState(false);
 	const [ updatedUser, setUpdatedUser ] = useState(default_form_values);
-	const { usersList, setUsersList } = useContext(MyContext); 
 
 	const classes = useStyles();
-	const users_rows = usersList.map( user => 
+	const children = usersList.map( user => 
 		<User 
 			key		= { user.id } 
 			user 	= { user }
@@ -29,15 +33,18 @@ function UserList() {
 	);
 
 
-
-	function update_user_info (updated_user) {
+	function update_user_info (is_changed = true) {
 		setVisible(false);
-		usersList.filter(x => x.id == updated_user.id)[0] = updated_user;
+		if (is_changed)
+			setUsersList([
+				...usersList.filter(x => x.id != updatedUser.id), 
+				updatedUser
+			]);
 	}
 
 
 	function open_update_user_modal (user) {
-		setUpdatedUser(user);
+		setUpdatedUser({...user});
 		setVisible(true);
 	}
 
@@ -53,7 +60,6 @@ function UserList() {
 	} 
 
 
-
 	return (
 		<div className = { classes.user_list }>
 			<table className = { classes.user_table }>
@@ -67,7 +73,7 @@ function UserList() {
 					</tr>
 				</thead>
 				<tbody>
-					{ users_rows }
+					{ children }
 				</tbody>
 			</table>
 			<MyModal 
@@ -77,9 +83,10 @@ function UserList() {
 				show_modal_content = { true }
 			>
 				<MyForm
-					key = 		"new_user_form"
-					form = 		{ updatedUser }
-					setForm = 	{ update_user_info }
+					key = 			"new_user_form"
+					form = 			{ updatedUser }
+					setForm = 		{ setUpdatedUser }
+					form_callback = { update_user_info }
 				/>
 			</MyModal>
 		</div>

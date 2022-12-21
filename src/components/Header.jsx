@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
 import MyForm from '../UI/form/MyForm';
 
+
+
 const default_form_values = {
 	username: 	'',
 	email: 		'',
@@ -15,34 +17,29 @@ const default_form_values = {
 	country:	''
 }
 
+
 function Header() {
 
 
 	const classes = useStyles();
 
-	const [visible, setVisible] = useState(false);
-	const [newUserForm, setNewUserForm] = useState(default_form_values);
+	const [ visible, setVisible ] = useState(false);
+	const [ newUserForm, setNewUserForm ] = useState(default_form_values);
 	const { usersList, setUsersList } = useContext(MyContext); 
 
 
-	function add_new_user (user) {
-		setNewUserForm(default_form_values);
-		setVisible(false);
-		
+	function add_new_user () {
+		const new_id = Math.max.apply(
+			null, usersList.map(x => parseInt(x.id))
+		) + 1;
 
-		let new_id = user.id;
-		if (!new_id) {
-			new_id = Math.max.apply(
-				null, usersList.map(x => parseInt(x.id))
-			) + 1;
-		}
 		setUsersList([...usersList, {
 			id: new_id,
-			...user
+			...newUserForm
 		}]);
+		setVisible(false);
+		setNewUserForm({...default_form_values});
 	}
-
-	
 
 
 	return (
@@ -50,12 +47,6 @@ function Header() {
 			<button
 				onClick = { () => setVisible(true) }
 			> Add new user </button>
-			<div id='home'>
-				<FontAwesomeIcon 
-					icon = { faRightToBracket }
-					size = "2x"
-				/>
-			</div>
 			<MyModal 
 				key = "create_user"
 				visible = { visible }
@@ -63,11 +54,18 @@ function Header() {
 				show_modal_content = { true }
 			>
 				<MyForm
-					key = 		"new_user_form"
-					form = 		{ newUserForm }
-					setForm = 	{ add_new_user }
+					key = 			"new_user_form"
+					form = 			{ newUserForm }
+					setForm = 		{ setNewUserForm }
+					form_callback = { add_new_user }
 				/>
 			</MyModal>
+			<div id = 'Login'>
+				<FontAwesomeIcon 
+					icon = { faRightToBracket }
+					size = "2x"
+				/>
+			</div>
 		</div>
 	)
 
