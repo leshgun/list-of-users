@@ -37,7 +37,7 @@ function UserList () {
 		setVisible(false);
 		if (is_changed)
 			setUsersList([
-				...usersList.filter(x => x.id != updatedUser.id), 
+				...usersList.filter(x => x.id !== updatedUser.id), 
 				updatedUser
 			]);
 	}
@@ -87,6 +87,7 @@ function UserList () {
 					form = 			{ updatedUser }
 					setForm = 		{ setUpdatedUser }
 					form_callback = { update_user_info }
+					form_name = 	"Update user info"
 				/>
 			</MyModal>
 		</div>

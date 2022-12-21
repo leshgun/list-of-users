@@ -50,7 +50,7 @@ const useStyles = createUseStyles ({
 			},
 	
 			"& tr:nth-child(even)": {
-				background: "#F8F8F8"
+				background: "#d8d8d8"
 			}
 		}
 	},

@@ -1,6 +1,7 @@
 import { createContext, useState } from 'react';
 import Header from './components/Header';
 import UserList from './components/UserList';
+import LoginService from './API/loginservice'
 
 import './styles/App.css';
 
@@ -28,19 +29,37 @@ const default_parameters = {
 			age:		"32",
 			country:	"United Kingdom"
 		},
-	]
+	],
+	login: {
+		username:		"",
+		password:	""
+	}
 }
 
 
 function App() {
 
-	const [usersList, setUsersList] = useState(default_parameters.users_example);
+	const [ usersList, setUsersList ] = useState(default_parameters.users_example);
+	const [ login, setLogin ] = useState(default_parameters.login);
+
+
+	function validate_login ({ username, password }) {
+		if (LoginService.check_login([ username, password ])) {
+			console.log("New login:", username);
+			setLogin({ username: username, password: "" });
+		} else {
+			console.log("Wrong password...");
+		}
+	}
+
 
 	return (
 		<div id = "App">
 			<MyContext.Provider value = {{
-				usersList: usersList,
-				setUsersList: setUsersList,
+				usersList: 		usersList,
+				setUsersList: 	setUsersList,
+				login:			login,
+				setLogin:		validate_login,
 				...default_parameters
 			}}>
 				<Header />

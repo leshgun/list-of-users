@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 
 import { MyContext } from '../App';
 import MyModal from '../UI/modal/MyModal';
@@ -7,6 +7,7 @@ import useStyles from '../styles/Header'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
 import MyForm from '../UI/form/MyForm';
+import LoginForm from "../UI/form/LoginForm";
 
 
 
@@ -23,9 +24,13 @@ function Header() {
 
 	const classes = useStyles();
 
+	const {
+		usersList, setUsersList,
+		setLogin
+	} = useContext(MyContext);
 	const [ visible, setVisible ] = useState(false);
+	const [ loginModalVisible, setLoginModalVisible ] = useState(false);
 	const [ newUserForm, setNewUserForm ] = useState(default_form_values);
-	const { usersList, setUsersList } = useContext(MyContext); 
 
 
 	function add_new_user () {
@@ -39,6 +44,10 @@ function Header() {
 		}]);
 		setVisible(false);
 		setNewUserForm({...default_form_values});
+	}
+
+	function open_login_form () {
+		setLoginModalVisible(true)
 	}
 
 
@@ -58,14 +67,21 @@ function Header() {
 					form = 			{ newUserForm }
 					setForm = 		{ setNewUserForm }
 					form_callback = { add_new_user }
+					form_name =		"Add new user"
 				/>
 			</MyModal>
 			<div id = 'Login'>
 				<FontAwesomeIcon 
-					icon = { faRightToBracket }
-					size = "2x"
+					icon = 		{ faRightToBracket }
+					size = 		"2x"
+					onClick = 	{ open_login_form }
 				/>
 			</div>
+			<LoginForm
+				loginFormVisible = 		{ loginModalVisible }
+				setLoginFormVisible = 	{ setLoginModalVisible }
+				setLogin =				{ setLogin }
+			></LoginForm>
 		</div>
 	)
 
